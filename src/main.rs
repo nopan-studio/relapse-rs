@@ -11,7 +11,6 @@ use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
 use serenity::prelude::*;
 
-
 struct Bot;
 
 // command modules.

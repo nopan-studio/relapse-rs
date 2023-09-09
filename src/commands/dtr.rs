@@ -25,7 +25,7 @@ pub async fn time_in(ctx: &Context, msg: &Message){
     // check if a time out wasn't called after last time in.
     let last_out = get_last_time_out(ctx, msg).await;
     let error_content = format!("It looks like {} still have not timed out. please use !out",msg.author.mention());
-    if last_out == "None" { channel.say(&ctx.http, error_content).await.unwrap(); return}
+    if last_out == "in" { channel.say(&ctx.http, error_content).await.unwrap(); return }
 
     // send message
     if let Err(why) = channel.send_message(&ctx.http, |m| {
@@ -145,12 +145,11 @@ async fn get_last_time_out(ctx: &Context, msg: &Message) -> String {
             
             if id.to_string() != msg.author.id.to_string() {  continue}
   
-            if action != "out" { break } 
-
-            return m.embeds[0].fields[3].value.clone();
+            if action == "in" { return "in".to_string() } 
+            if action == "out" { return "out".to_string() } 
         }
     }
-    
-    String::from("None")
+    // return None if there are no embeds if author
+    "None".to_string()
 }
 
