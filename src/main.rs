@@ -34,10 +34,10 @@ struct General;
 impl EventHandler for Bot {
     async fn message(&self, ctx: Context, msg: Message) {
         if msg.content == "!in"{
-            dtr::time_in(&ctx, &msg);
+            dtr::time_in(&ctx, &msg).await;
         }
         else if msg.content == "!out"{
-            dtr::time_out(&ctx, &msg);
+            dtr::time_out(&ctx, &msg).await;
         }
     }
 
