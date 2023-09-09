@@ -1,11 +1,15 @@
 use serenity::prelude::*;
 use serenity::model::channel::Message;
 use serenity::utils::Colour;
+use chrono_tz::Tz;
 
-const DTR_CHANNEL : &str = "relapse-time";  
+const DTR_CHANNEL: &str = "relapse-time";  
+const TIME_ZONE: &str = "Asia/Manila";
 
 pub async fn time_in(ctx: &Context, msg: &Message){
-    let time = chrono::prelude::Local::now();
+    let time = chrono::Utc::now();
+    let tz: Tz = TIME_ZONE.parse().unwrap();
+    let time: chrono::DateTime<Tz> = time.with_timezone(&tz);
     let time = time.format("%m/%d/%Y [%H:%M]").to_string();
 
     // deletes the command.
@@ -53,8 +57,10 @@ pub async fn time_out(ctx: &Context, msg: &Message){
         .channel_id_from_name(&ctx.cache, DTR_CHANNEL).unwrap();
     
     // get time
-    let time = chrono::prelude::Local::now();
-    let format = "%m/%d/%Y [%H:%M]";
+    let time = chrono::Utc::now();
+    let tz: Tz = TIME_ZONE.parse().unwrap();
+    let time: chrono::DateTime<Tz> = time.with_timezone(&tz);
+    let time = time.format("%m/%d/%Y [%H:%M]").to_string();
 
     // get last time in
     let time_in = get_last_time_in(ctx, msg).await;
