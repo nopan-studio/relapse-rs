@@ -1367,6 +1367,7 @@ dependencies = [
  "chrono",
  "chrono-tz",
  "dotenv",
+ "rand",
  "serenity",
  "shuttle-runtime",
  "shuttle-secrets",

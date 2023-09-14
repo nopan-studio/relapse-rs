@@ -19,14 +19,16 @@ mod commands {
     pub mod calculator;
     pub mod help;
     pub mod about;
+    pub mod other;
 }
 use commands::dtr;
 use commands::help::*;
 use commands::about::*;
 use commands::calculator::*;
+use commands::other::*;
 
 #[group]
-#[commands(about, help, add)]
+#[commands(about, help, sum, quo, diff, prod, flip, roll)]
 struct General;
 
 #[async_trait]
