@@ -5,7 +5,7 @@ use serenity::model::channel::Message;
 use rand::prelude::*;
 
 #[command]
-async fn flip(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
+async fn flip(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
 
     let mut content = format!("{} flipped `Tails`", msg.author.mention());
     
@@ -19,7 +19,7 @@ async fn flip(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
 }
 
 #[command]
-async fn roll(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
+async fn roll(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
 
     let rolled = rand::thread_rng().gen_range(1..=99);
 

@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 use shuttle_secrets::SecretStore;
-use tracing::{error, info};
+
 
 // STANDARD FRAMEWORK
 use serenity::framework::standard::macros::group;
@@ -21,6 +21,7 @@ mod commands {
     pub mod about;
     pub mod other;
 }
+
 use commands::dtr;
 use commands::help::*;
 use commands::about::*;
@@ -52,14 +53,14 @@ async fn serenity(
     #[shuttle_secrets::Secrets] secret_store: SecretStore,
 ) -> shuttle_serenity::ShuttleSerenity {
     // Get the discord token set in `Secrets.toml`
-    let token = if let Some(token) = secret_store.get("DISCORD_TOKEN") {
+    let token = if let Some(token) = secret_store.get("DISCORD_TOKEN") { 
         token
     } else {
         return Err(anyhow!("'DISCORD_TOKEN' was not found").into());
     };
 
     // Set gateway intents, which decides what events the bot will be notified about
-    let intents = GatewayIntents::GUILD_MESSAGES
+    let intents = GatewayIntents::GUILD_MESSAGES 
         | GatewayIntents::GUILDS
         | GatewayIntents::GUILD_MESSAGE_REACTIONS
         | GatewayIntents::DIRECT_MESSAGES
@@ -69,7 +70,7 @@ async fn serenity(
         .configure(|c| c.prefix("!"))
         .group(&GENERAL_GROUP);
 
-    let mut client = Client::builder(&token, intents)
+    let client = Client::builder(&token, intents)
         .event_handler(Bot)
         .framework(framework)
         .await.expect("Err creating client");

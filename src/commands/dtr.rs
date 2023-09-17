@@ -3,7 +3,7 @@ use serenity::model::channel::Message;
 use serenity::utils::Colour;
 use chrono_tz::Tz;
 
-const DTR_CHANNEL: &str = "relapse-time";  
+const DTR_CHANNEL: &str = "records";  
 const TIME_ZONE: &str = "Asia/Manila";
 
 pub async fn time_in(ctx: &Context, msg: &Message){
@@ -28,7 +28,7 @@ pub async fn time_in(ctx: &Context, msg: &Message){
     if last_out == "in" { channel.say(&ctx.http, error_content).await.unwrap(); return }
 
     // send message
-    if let Err(why) = channel.send_message(&ctx.http, |m| {
+    let _ = channel.send_message(&ctx.http, |m| {
         m.embed(
             |e| e
             .color(Colour::from_rgb(171,206,236))
@@ -40,9 +40,9 @@ pub async fn time_in(ctx: &Context, msg: &Message){
             .field("Time-Out:", " ", false)  
             .description("this user is going through some relapse.")
         )
-    }).await {
-        println!("Error sending message: {:?}", why);
-    }
+    }).await.unwrap();
+
+    println!("[{}][{}] : {}",chrono::Utc::now(), &msg.author, "time in"); 
 }
 
 pub async fn time_out(ctx: &Context, msg: &Message){
@@ -57,7 +57,6 @@ pub async fn time_out(ctx: &Context, msg: &Message){
         .channel_id_from_name(&ctx.cache, DTR_CHANNEL).unwrap();
     
     // get time
-    let time = chrono::prelude::Local::now();
     let format = "%m/%d/%Y [%H:%M]";
 
     let time = chrono::Utc::now();
@@ -83,7 +82,7 @@ pub async fn time_out(ctx: &Context, msg: &Message){
     let duration = format!("{} Days, {} Hours, {} Minutes", duration_days, duration_hours, duration_minutes);
 
     // send the embeded message.
-    let message = channel.send_message(&ctx.http, |m| {
+    let _ = channel.send_message(&ctx.http, |m| {
         m.embed(
             |e| e
             .color(Colour::from_rgb(171,206,236))
@@ -97,9 +96,9 @@ pub async fn time_out(ctx: &Context, msg: &Message){
         )
     }).await.unwrap();
 
+    println!("[{}][{}] : {}",chrono::Utc::now(), &msg.author, "time out"); 
     //message.react(&ctx.http, '🥇').await.unwrap();
     //message.pin(&ctx.http).await.unwrap();
-   
 }
 
 async fn get_messages(ctx: &Context, msg: &Message) -> Vec<Message> {
@@ -120,6 +119,9 @@ async fn get_last_time_in(ctx: &Context, msg: &Message) -> String {
         if m.embeds.len() != 0 {
             let id: &String = &m.embeds[0].fields[0].value;
             let id: String = id.chars().filter(|&c| c.is_digit(10)).collect();
+
+            if id.len() <= 0 { continue }
+
             let id = id.parse::<u64>().unwrap();
             if id.to_string() != msg.author.id.to_string() { continue; }
 
@@ -140,10 +142,13 @@ async fn get_last_time_out(ctx: &Context, msg: &Message) -> String {
         if m.embeds.len() != 0 {
             let id: &String = &m.embeds[0].fields[0].value;
             let id: String = id.chars().filter(|&c| c.is_digit(10)).collect();
+
+            if id.len() <= 0 { continue }
+
             let id = id.parse::<u64>().unwrap();
             let action: &String = &m.embeds[0].fields[1].value;
             
-            if id.to_string() != msg.author.id.to_string() {  continue}
+            if id.to_string() != msg.author.id.to_string() { continue }
   
             if action == "in" { return "in".to_string() } 
             if action == "out" { return "out".to_string() } 
