@@ -25,7 +25,7 @@ struct GiveAways {
 #[command]
 pub async fn free(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
 
-    let mut platform: String = String::new();
+    let mut platform: String;
 
     match args.single::<String>() {
         Ok(value) => { 
