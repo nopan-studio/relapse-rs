@@ -6,7 +6,7 @@ use serenity::utils::Colour;
 
 #[command]
 async fn help(ctx: &Context, msg: &Message) -> CommandResult {
-    let commands = " `!in` `!out` `!about` `!help` `!sum` `!diff` `!prod` `!quo` `!flip` `!roll`";
+    let commands = " `!in` `!out` `!about` `!help` `!sum` `!diff` `!prod` `!quo` `!flip` `!roll`, '!free `epic/steam/gog`'";
      // send message
     if let Err(why) = msg.channel_id.send_message(&ctx.http, |m| {
         m.embed(
